@@ -1,7 +1,5 @@
 import "./components/play-button"
-import "./components/piedra"
-import "./components/papel"
-import "./components/tijera"
+import "./components/elemento"
 import "./components/play-options"
 import "./components/countdown"
 import { initRouter } from "./root"

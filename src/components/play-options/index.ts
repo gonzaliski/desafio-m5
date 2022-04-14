@@ -1,6 +1,6 @@
 import "../piedra"
 import "../papel"
-import "../tijera"
+import "../elemento"
 customElements.define('play-options', class PlayOptions extends HTMLElement {
     shadow = this.attachShadow({ mode: "open"});
     constructor() {
@@ -18,9 +18,9 @@ customElements.define('play-options', class PlayOptions extends HTMLElement {
         `
         this.shadow.innerHTML = `
          <div class="options_container">
-         <piedra-el ></piedra-el>
-         <papel-el></papel-el>
-         <tijera-el></tijera-el>
+         <elemento-el elemento="piedra"></elemento-el>
+         <elemento-el elemento="papel"></elemento-el>
+         <elemento-el elemento="tijera"></elemento-el>
          </div>
         `
         this.shadow.appendChild(style);

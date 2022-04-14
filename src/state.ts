@@ -1,13 +1,14 @@
 type Play = "piedra" | "papel" | "tijera";
+type history = {
+  player:number,
+  com:number
+}
 const state = {
     data: {
-      playerPlay: "piedra",
+      playerPlay: "",
       comPlay:"",
-      history:{
-        player:0,
-        com:0,
-      }
-    },
+      history:{}
+        },
     listeners: [], // los callbacks
     // init(){
     //   const localData = localStorage.getItem("saved-item");
@@ -33,6 +34,8 @@ const state = {
     },
     getPlayerSelection(){
       const lastState = this.getState()
+      console.log("player move:", lastState.playerPlay);
+      
       return lastState.playerPlay
     },
     setState(newState) {
@@ -44,14 +47,15 @@ const state = {
       //localStorage.setItem("saved-item", JSON.stringify(newState))
     },
     subscribe(callback: (any) => any) {
-       // recibe callbacks para ser avisados posteriormente
-       this.listeners.push(callback);
+      // recibe callbacks para ser avisados posteriormente
+      this.listeners.push(callback);
     },
     savePlayerPlay(play:Play) {
       const currentState = this.getState();
       currentState.playerPlay = play
-      this.setComSelection();
+      console.log("saving player move:", currentState.playerPlay);
       this.setState(currentState);
+      this.setComSelection();
     },
     parameters:{},
     saveParams(params){
