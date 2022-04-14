@@ -15,6 +15,7 @@ customElements.define('play-button', class PlayButton extends HTMLElement {
                 width:322px;
                 height:87px;
                 font-size:45px;
+                font-family:'Odibee Sans';
                 color:white;
             }
         `

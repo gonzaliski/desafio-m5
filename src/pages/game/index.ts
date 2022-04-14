@@ -24,15 +24,10 @@ export function initPage(params){
     `
     const playerOption = div.querySelector(".options")
     playerOption.addEventListener("click",()=>{
-      params.goTo("/result")
+      params.goTo("/showHands")
     })
-
-    // console.log(div.querySelector(".countdown-game").shadowRoot.querySelector(``));
-    const cuentaRegresivaDiv = div.querySelector("countdown-game");
-    const h1El = cuentaRegresivaDiv.querySelector(".cuenta-regresiva");
-
-    console.log("cuentaRegresivaDiv:",cuentaRegresivaDiv);
-    console.log("h1El",h1El);
+    state.saveParams(params);
+    
     
     div.appendChild(style);
     return div

@@ -1,4 +1,5 @@
 import "../../pages/game";
+import {state} from "../../state"
 export function setSeconds(container) {
   let getSeconds = container.getAttribute("seconds");
   let countdown = parseInt(getSeconds, 10);
@@ -6,6 +7,10 @@ export function setSeconds(container) {
   secondEl.textContent = countdown;
   const intervalId = setInterval(() => {
     if (countdown == 0) {
+        if(location.pathname == "/game"){
+            state.getParams().goTo("/showHands");  
+            clearInterval(intervalId);
+        }
       clearInterval(intervalId);
     }
     secondEl.textContent = countdown;

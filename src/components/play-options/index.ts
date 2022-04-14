@@ -10,7 +10,6 @@ customElements.define('play-options', class PlayOptions extends HTMLElement {
 
     render(){
         const style = document.createElement("style");
-        const imageURL = require("url:../../assets/tijera.png");
         style.innerHTML = `
          .options_container{
              display:flex;

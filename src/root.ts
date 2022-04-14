@@ -1,7 +1,7 @@
 import {initPage as initTitle} from "./pages/welcome"
 import {initPage as initInstructions} from "./pages/instructions"
 import {initPage as initGame} from "./pages/game"
-import {initPage as initResult} from "./pages/result"
+import {initPage as initShowHands} from "./pages/showHands"
 
 const routes = [
   {
@@ -17,8 +17,8 @@ const routes = [
     component: initGame
   },
   {
-    path:/\/result/,
-    component: initResult
+    path:/\/showHands/,
+    component: initShowHands
   }
 ]
 const BASE_PATH = "/desafio-m5";

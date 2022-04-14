@@ -1,9 +1,12 @@
 type Play = "piedra" | "papel" | "tijera";
 const state = {
     data: {
-      playerPlays: [
-         "piedra","papel"
-      ],
+      playerPlay: "piedra",
+      comPlay:"",
+      history:{
+        player:0,
+        com:0,
+      }
     },
     listeners: [], // los callbacks
     // init(){
@@ -13,16 +16,24 @@ const state = {
     getState() {
       return this.data;
     },
-    getComSelection(){
-      const possiblePlays = ["piedra","papel","tijera"]
-      const comSelection = possiblePlays[Math.floor(Math.random()*possiblePlays.length)];
+    setComSelection(){
+      const comSelection = this.getRandomSelection();
       console.log("jugada de COM",comSelection)
-      return comSelection;
+      const currentState = this.getState();
+      currentState.comPlay = comSelection
+      this.setState(currentState)
+    },
+    getRandomSelection(){
+      const possiblePlays = ["piedra","papel","tijera"]
+      const randomSelection = possiblePlays[Math.floor(Math.random()*possiblePlays.length)];
+      return randomSelection
+    },
+    getComSelection(){
+      return this.getState().comPlay
     },
     getPlayerSelection(){
-      const lastState = this.getState().playerPlays
-      const playerMove = lastState[lastState.length - 1]
-      return playerMove
+      const lastState = this.getState()
+      return lastState.playerPlay
     },
     setState(newState) {
       // modifica this.data (el state) e invoca los callbacks
@@ -38,9 +49,25 @@ const state = {
     },
     savePlayerPlay(play:Play) {
       const currentState = this.getState();
-      currentState.data.playerPlays.push(play)
+      currentState.playerPlay = play
+      this.setComSelection();
       this.setState(currentState);
-      
+    },
+    parameters:{},
+    saveParams(params){
+      this.parameters = params
+    },
+    getParams(){
+      return this.parameters
+    }, 
+    playerWins(){
+      const playerMove = this.getPlayerSelection();
+      const comMove = this.getComSelection();
+      const ganeConTijera = playerMove == "tijera" && comMove =="papel"
+      const ganeConPapel = playerMove == "papel" && comMove =="piedra"
+      const ganeConPiedra = playerMove == "piedra" && comMove =="tijera"
+      const gane = [ganeConPapel,ganeConPiedra,ganeConTijera].includes(true);
+      return gane
     }
   };
 
