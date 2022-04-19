@@ -18,7 +18,9 @@ customElements.define('elemento-el', class Elemento extends HTMLElement {
         elemento.addEventListener("click",()=>{
 
           if(this.elemento == "piedra" || this.elemento == "papel" || this.elemento == "tijera"){
-            state.savePlayerPlay(this.elemento)
+            const currentState = state.getState();
+            currentState.savePlayerPlay(this.elemento);
+            state.setState(currentState)
           }
         })
       }
