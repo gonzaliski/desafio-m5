@@ -8,7 +8,8 @@ export function setSeconds(container) {
   const intervalId = setInterval(() => {
     if (countdown == 0) {
         if(location.pathname == "/game"){
-            state.getParams().goTo("/showHands");  
+          state.savePlayerPlay("tijera")  
+            state.getParams().goTo("/showHands");
             clearInterval(intervalId);
         }
       clearInterval(intervalId);

@@ -33,6 +33,8 @@ customElements.define('countdown-el', class countdown extends HTMLElement {
               }
             }
             .cuenta-regresiva{
+                font-family:'Roboto';
+                font-weight:700;
                 font-size:100px;
             }
             `

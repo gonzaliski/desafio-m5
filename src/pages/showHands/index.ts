@@ -11,7 +11,7 @@ export function initPage(params) {
   <elemento-el elemento="${playerMove}" class="option-player"></elemento-el>
   </div>
       `;
-  div.className ="container"
+  div.className = "container";
   const style = document.createElement("style");
   style.innerHTML = `
       :root{
@@ -44,44 +44,50 @@ export function initPage(params) {
       }
       
     `;
-   
+
+  state.whoWins();
+
   const resultEl = document.createElement("div");
   resultEl.innerHTML = `
-    <div class="result__container">
-    <div class="star__container">
-      <img src=${imageURL} class="star-img">
-      <p class="result-text">${state.playerWins()?"Ganaste":"Perdiste"}</p>
+  <div class="result__container">
+  <div class="star__container">
+  <img src=${imageURL} class="star-img">
+  <p class="result-text">${state.data.hasWon ? "Ganaste" : "Perdiste"}</p>
     </div>
     <div class="score__container">
-      <p class="score-title">Score</p>
-      <div class="score-result__container">
-        <p>Vos: 0</p>
-        <p>Maquina: 0 </p>
-      </div>
+    <p class="score-title">Score</p>
+    <div class="score-result__container">
+    <p>Vos: ${state.data.history.player}</p>
+    <p>Maquina:${state.data.history.com} </p>
     </div>
-      <play-button>Volver a jugar</play-button> 
-  </div>
-  <div class="background-container"></div>
-  <style>
-      .star-img{
-        height:259px;
-        width:254px;
-        filter: ${state.playerWins()?"":"invert(7%) sepia(13%) saturate(3689%) hue-rotate(601deg) brightness(95%) contrast(188%)"};
-      }
-      .star__container{
-        margin-top:20px;
-        position:relative;
-        
-      }
-      .result__container{
-        position:absolute;
-        z-index:9;
-        display:flex;
-        width:100%;
-        height:100vh;
-        flex-direction:column;
-        align-items:center;
-        gap:20px;
+    </div>
+    <play-button class="play-again__button">Volver a jugar</play-button> 
+    </div>
+    <div class="background-container"></div>
+    <style>
+    .star-img{
+      height:259px;
+      width:254px;
+      filter: ${
+        state.data.hasWon
+          ? ""
+          : "invert(7%) sepia(13%) saturate(3689%) hue-rotate(601deg) brightness(95%) contrast(188%)"
+      };
+    }
+    .star__container{
+      margin-top:20px;
+      position:relative;
+      
+    }
+    .result__container{
+      position:absolute;
+      z-index:9;
+      display:flex;
+      width:100%;
+      height:100vh;
+      flex-direction:column;
+      align-items:center;
+      gap:20px;
       }
       .result-text{
         position:absolute;
@@ -110,15 +116,22 @@ export function initPage(params) {
       .background-container{
         height:100vh;
         width:100%;
-        background-color:var(${state.playerWins()?"--won-color":"--loose-color"});
+        background-color:var(${
+          state.data.hasWon ? "--won-color" : "--loose-color"
+        });
         opacity:0.5;
       }
-  </style>
-  `
-  setTimeout( ()=>{ 
-    div.appendChild(resultEl)
-   }, 3000);
+      </style>
+      `;
+  setTimeout(() => {
+    div.appendChild(resultEl);
+  }, 3000);
 
+  resultEl
+    .querySelector(".play-again__button")
+    .addEventListener("click", () => {
+      params.goTo("/game");
+    });
 
   div.appendChild(style);
   return div;
