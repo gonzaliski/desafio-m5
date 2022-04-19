@@ -30,6 +30,7 @@ export function initPage(params){
         pointer-events:none;
         position:absolute;
         bottom:0px;
+
       }
     `
     const buttonEl = div.querySelector(".button-play");

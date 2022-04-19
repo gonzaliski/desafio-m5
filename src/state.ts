@@ -9,11 +9,10 @@ const state = {
     },
     hasWon: false,
   },
-  listeners: [], // los callbacks
-  // init(){
-  //   const localData = localStorage.getItem("saved-item");
-  //   this.setState(JSON.parse(localData))
-  // },
+  init(){
+    const localData = localStorage.getItem("saved-item");
+    this.setState(JSON.parse(localData))
+  },
   getState() {
     return this.data;
   },
@@ -42,14 +41,7 @@ const state = {
   setState(newState) {
     // modifica this.data (el state) e invoca los callbacks
     this.data = newState;
-    for (const cb of this.listeners) {
-      cb(newState);
-    }
   
-  },
-  subscribe(callback: (any) => any) {
-    // recibe callbacks para ser avisados posteriormente
-    this.listeners.push(callback);
   },
   savePlayerPlay(play: Play) {
     const currentState = this.getState();

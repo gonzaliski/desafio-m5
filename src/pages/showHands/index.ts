@@ -31,18 +31,38 @@ export function initPage(params) {
         align-items: center;
         justify-items:center;
         position:absolute;
+        overflow: hidden;
       }
       .option-player{
         transform: scale(1.5);
         position: absolute;
         bottom:0px;
+        animation: move-up 2s ease 1;
       }
       .option-com{
         transform: scale(1.5) rotate(180deg);
         position: absolute;
         top:0px;
+        animation: move-down 2s ease 1;
       }
-      
+      @keyframes move-down{
+        0%{
+          transform:translateY(-70px) scale(1.5) rotate(180deg);
+        }
+ 
+        100%{
+          transform:translateY(0px) scale(1.5) rotate(180deg);
+        }
+      }
+      @keyframes move-up{
+        0%{
+          transform:translateY(70px) scale(1.5);
+        }
+ 
+        100%{
+          transform:translateY(0px) scale(1.5);
+        }
+      }
     `;
 
   state.whoWins();

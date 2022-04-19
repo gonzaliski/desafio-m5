@@ -13,7 +13,14 @@ customElements.define('play-options', class PlayOptions extends HTMLElement {
         style.innerHTML = `
          .options_container{
              display:flex;
-             gap:10px;
+             gap:48px;
+             
+         }
+         @media(min-widht:960px){
+          .options_container{
+            gap:68px;
+            transform:scale(1.5);
+            }
          }
         `
         this.shadow.innerHTML = `
