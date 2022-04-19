@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "parcel ./src/index.html",
     "build": "parcel build ./src/index.html --dist-dir build --public-url /desafio-m5",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d ./dist",
     "build-and-deploy": "npm run build && npm run deploy"
   },
   "dependencies": {
