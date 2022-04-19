@@ -29,10 +29,6 @@ function isGithubPages() {
 
 export function initRouter(container: Element) {
   function goTo(path) {
-    // el goTo va a recibir la ruta de siempre: /jugar
-    // por eso, en el caso de GitHub Pages
-    // debemos anteponerle el BASE_PATH para que funcione
-    // en ese contexto
     const completePath = isGithubPages() ? BASE_PATH + path : path;
     history.pushState({}, "", completePath);
     handleRoute(completePath);
@@ -40,7 +36,7 @@ export function initRouter(container: Element) {
   function handleRoute(route) {
     console.log("El handleRoute recibió una nueva ruta", route);
     const newRoute = isGithubPages() ? route.replace(BASE_PATH, "") : route;
-    //recibe una ruta, la compara ocn las rutas del array routes y
+    //recibe una ruta, la compara con las rutas del array routes y
     //pregunta si alguna coincide con el patron y ejecuta la funcion asociada con esa ruta
     for (const r of routes) {
       if (r.path.test(newRoute)) {
