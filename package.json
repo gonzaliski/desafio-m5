@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel src/index.html",
-    "build": "parcel build src/index.html ",
+    "dev": "parcel ./src/index.html",
+    "build": "parcel build ./src/index.html ",
     "deploy": "gh-pages -d ./dist",
     "build-and-deploy": "npm run build && npm run deploy"
   },
