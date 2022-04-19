@@ -1,5 +1,3 @@
-import "../piedra"
-import "../papel"
 import "../elemento"
 customElements.define('play-options', class PlayOptions extends HTMLElement {
     shadow = this.attachShadow({ mode: "open"});

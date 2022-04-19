@@ -2,17 +2,17 @@
   "name": "dwf-m5-desafio-final",
   "version": "1.0.0",
   "license": "MIT",
-  "devDependencies": {
-    "parcel": "^2.0.0-rc.0"
+  "scripts": {
+    "dev": "parcel src/index.html",
+    "build": "parcel build src/index.html ",
+    "deploy": "gh-pages -d ./dist",
+    "build-and-deploy": "npm run build && npm run deploy"
   },
-  "scripts":{
-    "dev":"parcel serve ./src/index.html",
-    "build":"parcel build ./src/index.html ",
-    "deploy":"gh-pages -d ./dist",
-    "build-and-deploy":"npm run build && npm run deploy"
-  }, 
   "dependencies": {
     "gh-pages": "^3.2.3",
-    "parcel": "^2.0.1"
+    "parcel": "^2.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.25"
   }
 }
