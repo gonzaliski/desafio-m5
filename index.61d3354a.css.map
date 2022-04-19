@@ -1,1 +1,0 @@
-{"mappings":"AAAA;;;;AAIA;;;;AAKA","sources":["src/index.css"],"sourcesContent":["*{\r\n    box-sizing: border-box;\r\n}\r\n\r\nbody{\r\n    margin:0;\r\n    \r\n}\r\n\r\n.root{\r\n    background-image: url(\"./assets/fondo.png\");\r\n}"],"names":[],"version":3,"file":"index.61d3354a.css.map","sourceRoot":"/__parcel_source_root/"}
