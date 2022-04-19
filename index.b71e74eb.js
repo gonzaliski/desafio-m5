@@ -167,8 +167,7 @@ function _createForOfIteratorHelper(o, allowArrayLike) {
         if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
             if (it) o = it;
             var i = 0;
-            var F = function F1() {
-            };
+            var F = function F() {};
             return {
                 s: F,
                 n: function n() {
@@ -265,8 +264,7 @@ function Module(moduleName) {
         _acceptCallbacks: [],
         _disposeCallbacks: [],
         accept: function accept(fn) {
-            this._acceptCallbacks.push(fn || function() {
-            });
+            this._acceptCallbacks.push(fn || function() {});
         },
         dispose: function dispose(fn) {
             this._disposeCallbacks.push(fn);
@@ -275,7 +273,7 @@ function Module(moduleName) {
     module.bundle.hotData = undefined;
 }
 module.bundle.Module = Module;
-var checkedAssets, acceptedAssets, assetsToAccept;
+var checkedAssets, acceptedAssets, assetsToAccept /*: Array<[ParcelRequire, string]> */ ;
 function getHostname() {
     return HMR_HOST || (location.protocol.indexOf('http') === 0 ? location.hostname : 'localhost');
 }
@@ -289,10 +287,8 @@ if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
     var protocol = HMR_SECURE || location.protocol == 'https:' && !/localhost|127.0.0.1|0.0.0.0/.test(hostname) ? 'wss' : 'ws';
     var ws = new WebSocket(protocol + '://' + hostname + (port ? ':' + port : '') + '/'); // $FlowFixMe
     ws.onmessage = function(event) {
-        checkedAssets = {
-        };
-        acceptedAssets = {
-        };
+        checkedAssets = {} /*: {|[string]: boolean|} */ ;
+        acceptedAssets = {} /*: {|[string]: boolean|} */ ;
         assetsToAccept = [];
         var data = JSON.parse(event.data);
         if (data.type === 'update') {
@@ -438,23 +434,23 @@ function hmrApply(bundle, asset) {
         } else if (bundle.parent) hmrApply(bundle.parent, asset);
     }
 }
-function hmrDelete(bundle, id) {
+function hmrDelete(bundle, id1) {
     var modules = bundle.modules;
     if (!modules) return;
-    if (modules[id]) {
+    if (modules[id1]) {
         // Collect dependencies that will become orphaned when this module is deleted.
-        var deps = modules[id][1];
+        var deps = modules[id1][1];
         var orphans = [];
         for(var dep in deps){
             var parents = getParents(module.bundle.root, deps[dep]);
             if (parents.length === 1) orphans.push(deps[dep]);
         } // Delete the module. This must be done before deleting dependencies in case of circular dependencies.
-        delete modules[id];
-        delete bundle.cache[id]; // Now delete the orphans.
-        orphans.forEach(function(id1) {
-            hmrDelete(module.bundle.root, id1);
+        delete modules[id1];
+        delete bundle.cache[id1]; // Now delete the orphans.
+        orphans.forEach(function(id) {
+            hmrDelete(module.bundle.root, id);
         });
-    } else if (bundle.parent) hmrDelete(bundle.parent, id);
+    } else if (bundle.parent) hmrDelete(bundle.parent, id1);
 }
 function hmrAcceptCheck(bundle, id, depsByBundle) {
     if (hmrAcceptCheckOne(bundle, id, depsByBundle)) return true;
@@ -499,8 +495,7 @@ function hmrAcceptCheckOne(bundle, id, depsByBundle) {
 }
 function hmrAcceptRun(bundle, id) {
     var cached = bundle.cache[id];
-    bundle.hotData = {
-    };
+    bundle.hotData = {};
     if (cached && cached.hot) cached.hot.data = bundle.hotData;
     if (cached && cached.hot && cached.hot._disposeCallbacks.length) cached.hot._disposeCallbacks.forEach(function(cb) {
         cb(bundle.hotData);
@@ -532,136 +527,80 @@ var _state = require("./state");
 
 },{"./components/play-button":"2yhne","./components/play-options":"gGNTY","./root":"iV5tF","./components/countdown":"aGzWk","./components/elemento":"5Vl4q","./state":"1Yeju"}],"2yhne":[function(require,module,exports) {
 customElements.define('play-button', class PlayButton extends HTMLElement {
+    shadow = this.attachShadow({
+        mode: "open"
+    });
+    constructor(){
+        super();
+        this.render();
+    }
     render() {
         const style = document.createElement("style");
         const content = this.textContent;
-        style.innerHTML = `\n            .blue-button{\n                background: #006CFC;\n                border: 10px solid #001997;\n                border-radius: 10px;\n                width:322px;\n                height:87px;\n                font-size:45px;\n                font-family:'Odibee Sans';\n                color:white;\n            }\n        `;
-        this.shadow.innerHTML = `\n         <button class="blue-button">${content}</button>\n        `;
+        style.innerHTML = `
+            .blue-button{
+                background: #006CFC;
+                border: 10px solid #001997;
+                border-radius: 10px;
+                width:322px;
+                height:87px;
+                font-size:45px;
+                font-family:'Odibee Sans';
+                color:white;
+            }
+        `;
+        this.shadow.innerHTML = `
+         <button class="blue-button">${content}</button>
+        `;
         this.shadow.appendChild(style);
-    }
-    constructor(){
-        super();
-        this.shadow = this.attachShadow({
-            mode: "open"
-        });
-        this.render();
     }
 });
 
 },{}],"gGNTY":[function(require,module,exports) {
-var _piedra = require("../piedra");
-var _papel = require("../papel");
 var _elemento = require("../elemento");
 customElements.define('play-options', class PlayOptions extends HTMLElement {
-    render() {
-        const style = document.createElement("style");
-        style.innerHTML = `\n         .options_container{\n             display:flex;\n             gap:48px;\n             \n         }\n         @media(min-widht:960px){\n          .options_container{\n            gap:68px;\n            transform:scale(1.5);\n            }\n         }\n        `;
-        this.shadow.innerHTML = `\n         <div class="options_container">\n         <elemento-el elemento="piedra"></elemento-el>\n         <elemento-el elemento="papel"></elemento-el>\n         <elemento-el elemento="tijera"></elemento-el>\n         </div>\n        `;
-        this.shadow.appendChild(style);
-    }
+    shadow = this.attachShadow({
+        mode: "open"
+    });
     constructor(){
         super();
-        this.shadow = this.attachShadow({
-            mode: "open"
-        });
         this.render();
-    }
-});
-
-},{"../piedra":"4aBdO","../papel":"d106K","../elemento":"5Vl4q"}],"4aBdO":[function(require,module,exports) {
-customElements.define('piedra-el', class Piedra extends HTMLElement {
-    addListeners() {
-        const piedraEl = this.shadow.querySelector(".piedra-container");
-        piedraEl.addEventListener("click", ()=>{
-            console.log("piedra");
-        });
     }
     render() {
         const style = document.createElement("style");
-        const imageURL = require("url:../../assets/piedra.png");
-        style.innerHTML = `\n         \n        `;
-        this.shadow.innerHTML = `\n         <div class="piedra-container">\n           <img src=${imageURL}></img>\n         </div>\n        `;
+        style.innerHTML = `
+         .options_container{
+             display:flex;
+             gap:48px;
+             
+         }
+         @media(min-widht:960px){
+          .options_container{
+            gap:68px;
+            transform:scale(1.5);
+            }
+         }
+        `;
+        this.shadow.innerHTML = `
+         <div class="options_container">
+         <elemento-el elemento="piedra"></elemento-el>
+         <elemento-el elemento="papel"></elemento-el>
+         <elemento-el elemento="tijera"></elemento-el>
+         </div>
+        `;
         this.shadow.appendChild(style);
-        this.addListeners();
-    }
-    constructor(){
-        super();
-        this.shadow = this.attachShadow({
-            mode: "open"
-        });
-        this.render();
     }
 });
 
-},{"url:../../assets/piedra.png":"4bqM6"}],"4bqM6":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('7UhFu') + "piedra.c2a3c43e.png" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
-"use strict";
-var bundleURL = {
-};
-function getBundleURLCached(id) {
-    var value = bundleURL[id];
-    if (!value) {
-        value = getBundleURL();
-        bundleURL[id] = value;
-    }
-    return value;
-}
-function getBundleURL() {
-    try {
-        throw new Error();
-    } catch (err) {
-        var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
-        if (matches) // The first two stack frames will be this function and getBundleURLCached.
-        // Use the 3rd one, which will be a runtime in the original bundle.
-        return getBaseURL(matches[2]);
-    }
-    return '/';
-}
-function getBaseURL(url) {
-    return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
-} // TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
-function getOrigin(url) {
-    var matches = ('' + url).match(/(https?|file|ftp):\/\/[^/]+/);
-    if (!matches) throw new Error('Origin not found');
-    return matches[0];
-}
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-exports.getOrigin = getOrigin;
-
-},{}],"d106K":[function(require,module,exports) {
-customElements.define('papel-el', class Papel extends HTMLElement {
-    addListeners() {
-        const papelEl = this.shadow.querySelector(".papel-container");
-        papelEl.addEventListener("click", ()=>{
-            console.log("papel");
-        });
-    }
-    render() {
-        const style = document.createElement("style");
-        const imageURL = require("url:../../assets/papel.png");
-        style.innerHTML = `\n         \n        `;
-        this.shadow.innerHTML = `\n         <div class="papel-container">\n           <img src=${imageURL}></img>\n         </div>\n        `;
-        this.shadow.appendChild(style);
-        this.addListeners();
-    }
-    constructor(){
-        super();
-        this.shadow = this.attachShadow({
-            mode: "open"
-        });
-        this.render();
-    }
-});
-
-},{"url:../../assets/papel.png":"gHwV3"}],"gHwV3":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('7UhFu') + "papel.73504e79.png" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}],"5Vl4q":[function(require,module,exports) {
+},{"../elemento":"5Vl4q"}],"5Vl4q":[function(require,module,exports) {
 var _state = require("../../state");
 customElements.define('elemento-el', class Elemento extends HTMLElement {
+    shadow = this.attachShadow({
+        mode: "open"
+    });
+    constructor(){
+        super();
+    }
     connectedCallback() {
         this.elemento = this.getAttribute("elemento") || "tijera";
         this.render();
@@ -677,14 +616,12 @@ customElements.define('elemento-el', class Elemento extends HTMLElement {
         if (this.elemento == "tijera") imageURL = require("url:../../assets/tijera.png");
         if (this.elemento == "piedra") imageURL = require("url:../../assets/piedra.png");
         if (this.elemento == "papel") imageURL = require("url:../../assets/papel.png");
-        this.shadow.innerHTML = `\n         <div class="elemento-container">\n           <img src=${imageURL}></img>\n         </div>\n        `;
+        this.shadow.innerHTML = `
+         <div class="elemento-container">
+           <img src=${imageURL}></img>
+         </div>
+        `;
         this.addListeners();
-    }
-    constructor(){
-        super();
-        this.shadow = this.attachShadow({
-            mode: "open"
-        });
     }
 });
 
@@ -747,8 +684,7 @@ const state = {
         this.setState(currentState);
         this.setComSelection();
     },
-    parameters: {
-    },
+    parameters: {},
     saveParams (params) {
         this.parameters = params;
     },
@@ -827,6 +763,46 @@ exports.export = function(dest, destName, get) {
 },{}],"6cLYs":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('7UhFu') + "tijera.2df6857a.png" + "?" + Date.now();
 
+},{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
+"use strict";
+var bundleURL = {};
+function getBundleURLCached(id) {
+    var value = bundleURL[id];
+    if (!value) {
+        value = getBundleURL();
+        bundleURL[id] = value;
+    }
+    return value;
+}
+function getBundleURL() {
+    try {
+        throw new Error();
+    } catch (err) {
+        var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
+        if (matches) // The first two stack frames will be this function and getBundleURLCached.
+        // Use the 3rd one, which will be a runtime in the original bundle.
+        return getBaseURL(matches[2]);
+    }
+    return '/';
+}
+function getBaseURL(url) {
+    return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
+} // TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+function getOrigin(url) {
+    var matches = ('' + url).match(/(https?|file|ftp):\/\/[^/]+/);
+    if (!matches) throw new Error('Origin not found');
+    return matches[0];
+}
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
+
+},{}],"4bqM6":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('7UhFu') + "piedra.c2a3c43e.png" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}],"gHwV3":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('7UhFu') + "papel.73504e79.png" + "?" + Date.now();
+
 },{"./helpers/bundle-url":"lgJ39"}],"iV5tF":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -860,19 +836,14 @@ function isGithubPages() {
 }
 function initRouter(container) {
     function goTo(path) {
-        // el goTo va a recibir la ruta de siempre: /jugar
-        // por eso, en el caso de GitHub Pages
-        // debemos anteponerle el BASE_PATH para que funcione
-        // en ese contexto
         const completePath = isGithubPages() ? BASE_PATH + path : path;
-        history.pushState({
-        }, "", completePath);
+        history.pushState({}, "", completePath);
         handleRoute(completePath);
     }
     function handleRoute(route) {
         console.log("El handleRoute recibió una nueva ruta", route);
         const newRoute = isGithubPages() ? route.replace(BASE_PATH, "") : route;
-        //recibe una ruta, la compara ocn las rutas del array routes y
+        //recibe una ruta, la compara con las rutas del array routes y
         //pregunta si alguna coincide con el patron y ejecuta la funcion asociada con esa ruta
         for (const r of routes)if (r.path.test(newRoute)) {
             const el = r.component({
@@ -897,10 +868,38 @@ parcelHelpers.export(exports, "initPage", ()=>initPage
 var _root = require("../../root");
 function initPage(params) {
     const div = document.createElement("div");
-    div.innerHTML = `\n        <h1 class="title">Piedra\n        Papel ó\n        Tijera</h1>\n        <play-button class="button-play">Jugar!</play-button>\n        <play-options class="options"></play-options>\n    `;
+    div.innerHTML = `
+        <h1 class="title">Piedra
+        Papel ó
+        Tijera</h1>
+        <play-button class="button-play">Jugar!</play-button>
+        <play-options class="options"></play-options>
+    `;
     div.className = "title_container";
     const style = document.createElement("style");
-    style.innerHTML = `\n      .title_container{\n          display:grid;\n          grid-template-rows: 350px 150px 200px;\n          align-items: center;\n          justify-items:center;\n          height:100vh;\n          position:relative;\n      }\n      .title{\n        text-align:center;\n        font-family:'Roboto';\n        font-weight: 700;\n        font-size: 80px;  \n        color:#009048;\n      }\n      .options{\n        pointer-events:none;\n        position:absolute;\n        bottom:0px;\n\n      }\n    `;
+    style.innerHTML = `
+      .title_container{
+          display:grid;
+          grid-template-rows: 350px 150px 200px;
+          align-items: center;
+          justify-items:center;
+          height:100vh;
+          position:relative;
+      }
+      .title{
+        text-align:center;
+        font-family:'Roboto';
+        font-weight: 700;
+        font-size: 80px;  
+        color:#009048;
+      }
+      .options{
+        pointer-events:none;
+        position:absolute;
+        bottom:0px;
+
+      }
+    `;
     const buttonEl = div.querySelector(".button-play");
     buttonEl.addEventListener('click', ()=>{
         params.goTo("/instructions");
@@ -917,10 +916,38 @@ parcelHelpers.export(exports, "initPage", ()=>initPage
 var _root = require("../../root");
 function initPage(params) {
     const div = document.createElement("div");
-    div.innerHTML = `\n        <h2 class="title">Presioná jugar\n        y elegí: piedra, papel o tijera antes de que pasen los 3 segundos.\n        </h2>\n        <play-button class="button-play">Jugar!</play-button>\n        <play-options class="options"></play-options>\n    `;
+    div.innerHTML = `
+        <h2 class="title">Presioná jugar
+        y elegí: piedra, papel o tijera antes de que pasen los 3 segundos.
+        </h2>
+        <play-button class="button-play">Jugar!</play-button>
+        <play-options class="options"></play-options>
+    `;
     div.className = "title_container";
     const style = document.createElement("style");
-    style.innerHTML = `\n      .title_container{\n          display:grid;\n          grid-template-rows: 350px 150px 200px;\n          align-items: center;\n          justify-items:center;\n          height:100vh;\n          position:relative;\n      }\n      .title{\n        padding:10px;\n        text-align:center;\n        font-family:'Roboto';\n        font-size: 40px;  \n        color:#009048;\n      }\n      .options{\n        pointer-events:none;\n        position:absolute;\n        bottom:0px;\n\n      }\n    `;
+    style.innerHTML = `
+      .title_container{
+          display:grid;
+          grid-template-rows: 350px 150px 200px;
+          align-items: center;
+          justify-items:center;
+          height:100vh;
+          position:relative;
+      }
+      .title{
+        padding:10px;
+        text-align:center;
+        font-family:'Roboto';
+        font-size: 40px;  
+        color:#009048;
+      }
+      .options{
+        pointer-events:none;
+        position:absolute;
+        bottom:0px;
+
+      }
+    `;
     const buttonEl = div.querySelector(".button-play");
     buttonEl.addEventListener('click', ()=>{
         params.goTo("/game");
@@ -938,10 +965,26 @@ var _root = require("../../root");
 var _state = require("../../state");
 function initPage(params) {
     const div = document.createElement("div");
-    div.innerHTML = `\n        <countdown-el seconds="3" class="countdown-game"></countdown-el>\n        <play-options class="options"></play-options>\n    `;
+    div.innerHTML = `
+        <countdown-el seconds="3" class="countdown-game"></countdown-el>
+        <play-options class="options"></play-options>
+    `;
     div.className = "title_container";
     const style = document.createElement("style");
-    style.innerHTML = `\n      .title_container{\n          display:grid;\n          grid-template-rows: 500px;\n          align-items: center;\n          justify-items:center;\n          height:100vh;\n          position:relative;\n      }\n      .options{\n        position:absolute;\n        bottom:0px;\n      }\n    `;
+    style.innerHTML = `
+      .title_container{
+          display:grid;
+          grid-template-rows: 500px;
+          align-items: center;
+          justify-items:center;
+          height:100vh;
+          position:relative;
+      }
+      .options{
+        position:absolute;
+        bottom:0px;
+      }
+    `;
     const playerOption = div.querySelector(".options");
     playerOption.addEventListener("click", ()=>{
         params.goTo("/showHands");
@@ -963,13 +1006,136 @@ function initPage(params) {
     const playerMove = _state.state.getPlayerSelection();
     const comMove = _state.state.getComSelection();
     const imageURL = require("url:../../assets/star.png");
-    div.innerHTML = `\n  <div class="hands__container">\n  <elemento-el elemento="${comMove}" class="option-com"></elemento-el>\n  <elemento-el elemento="${playerMove}" class="option-player"></elemento-el>\n  </div>\n      `;
+    div.innerHTML = `
+  <div class="hands__container">
+  <elemento-el elemento="${comMove}" class="option-com"></elemento-el>
+  <elemento-el elemento="${playerMove}" class="option-player"></elemento-el>
+  </div>
+      `;
     div.className = "container";
     const style = document.createElement("style");
-    style.innerHTML = `\n      :root{\n        --won-color: #888949E5;\n        --loose-color: #894949;\n      }\n      .container{\n        height:100vh;\n        position:relative;\n        font-family:'Odibee Sans'\n      }\n      .hands__container{\n        height:100vh;\n        width:100%;\n        display:flex;\n        flex-direction:column;\n        align-items: center;\n        justify-items:center;\n        position:absolute;\n        overflow: hidden;\n      }\n      .option-player{\n        transform: scale(1.5);\n        position: absolute;\n        bottom:0px;\n        animation: move-up 2s ease 1;\n      }\n      .option-com{\n        transform: scale(1.5) rotate(180deg);\n        position: absolute;\n        top:0px;\n        animation: move-down 2s ease 1;\n      }\n      @keyframes move-down{\n        0%{\n          transform:translateY(-70px) scale(1.5) rotate(180deg);\n        }\n \n        100%{\n          transform:translateY(0px) scale(1.5) rotate(180deg);\n        }\n      }\n      @keyframes move-up{\n        0%{\n          transform:translateY(70px) scale(1.5);\n        }\n \n        100%{\n          transform:translateY(0px) scale(1.5);\n        }\n      }\n    `;
+    style.innerHTML = `
+      :root{
+        --won-color: #888949E5;
+        --loose-color: #894949;
+      }
+      .container{
+        height:100vh;
+        position:relative;
+        font-family:'Odibee Sans'
+      }
+      .hands__container{
+        height:100vh;
+        width:100%;
+        display:flex;
+        flex-direction:column;
+        align-items: center;
+        justify-items:center;
+        position:absolute;
+        overflow: hidden;
+      }
+      .option-player{
+        transform: scale(1.5);
+        position: absolute;
+        bottom:0px;
+        animation: move-up 2s ease 1;
+      }
+      .option-com{
+        transform: scale(1.5) rotate(180deg);
+        position: absolute;
+        top:0px;
+        animation: move-down 2s ease 1;
+      }
+      @keyframes move-down{
+        0%{
+          transform:translateY(-70px) scale(1.5) rotate(180deg);
+        }
+ 
+        100%{
+          transform:translateY(0px) scale(1.5) rotate(180deg);
+        }
+      }
+      @keyframes move-up{
+        0%{
+          transform:translateY(70px) scale(1.5);
+        }
+ 
+        100%{
+          transform:translateY(0px) scale(1.5);
+        }
+      }
+    `;
     _state.state.whoWins();
     const resultEl = document.createElement("div");
-    resultEl.innerHTML = `\n  <div class="result__container">\n  <div class="star__container">\n  <img src=${imageURL} class="star-img">\n  <p class="result-text">${_state.state.data.hasWon ? "Ganaste" : "Perdiste"}</p>\n    </div>\n    <div class="score__container">\n    <p class="score-title">Score</p>\n    <div class="score-result__container">\n    <p>Vos: ${_state.state.data.history.player}</p>\n    <p>Maquina:${_state.state.data.history.com} </p>\n    </div>\n    </div>\n    <play-button class="play-again__button">Volver a jugar</play-button> \n    </div>\n    <div class="background-container"></div>\n    <style>\n    .star-img{\n      height:259px;\n      width:254px;\n      filter: ${_state.state.data.hasWon ? "" : "invert(7%) sepia(13%) saturate(3689%) hue-rotate(601deg) brightness(95%) contrast(188%)"};\n    }\n    .star__container{\n      margin-top:20px;\n      position:relative;\n      \n    }\n    .result__container{\n      position:absolute;\n      z-index:9;\n      display:flex;\n      width:100%;\n      height:100vh;\n      flex-direction:column;\n      align-items:center;\n      gap:20px;\n      }\n      .result-text{\n        position:absolute;\n        font-size:55px;\n        top: 45%;\n        left: 50%;\n        transform: translate(-50%, -50%);\n      }\n      .score__container{\n        display:grid;\n        justify-items:center;\n        width:260px;\n        height:218px;\n        border:10px solid #000000;\n        background-color: white;\n        align-items:center;\n        font-size:45px;\n        box-sizing:content-box;\n      }\n      .score-result__container{\n      text-align:right;\n      }\n      p{\n        margin:0;\n      }\n      .background-container{\n        height:100vh;\n        width:100%;\n        background-color:var(${_state.state.data.hasWon ? "--won-color" : "--loose-color"});\n        opacity:0.5;\n      }\n      </style>\n      `;
+    resultEl.innerHTML = `
+  <div class="result__container">
+  <div class="star__container">
+  <img src=${imageURL} class="star-img">
+  <p class="result-text">${_state.state.data.hasWon ? "Ganaste" : "Perdiste"}</p>
+    </div>
+    <div class="score__container">
+    <p class="score-title">Score</p>
+    <div class="score-result__container">
+    <p>Vos: ${_state.state.data.history.player}</p>
+    <p>Maquina:${_state.state.data.history.com} </p>
+    </div>
+    </div>
+    <play-button class="play-again__button">Volver a jugar</play-button> 
+    </div>
+    <div class="background-container"></div>
+    <style>
+    .star-img{
+      height:259px;
+      width:254px;
+      filter: ${_state.state.data.hasWon ? "" : "invert(7%) sepia(13%) saturate(3689%) hue-rotate(601deg) brightness(95%) contrast(188%)"};
+    }
+    .star__container{
+      margin-top:20px;
+      position:relative;
+      
+    }
+    .result__container{
+      position:absolute;
+      z-index:9;
+      display:flex;
+      width:100%;
+      height:100vh;
+      flex-direction:column;
+      align-items:center;
+      gap:20px;
+      }
+      .result-text{
+        position:absolute;
+        font-size:55px;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .score__container{
+        display:grid;
+        justify-items:center;
+        width:260px;
+        height:218px;
+        border:10px solid #000000;
+        background-color: white;
+        align-items:center;
+        font-size:45px;
+        box-sizing:content-box;
+      }
+      .score-result__container{
+      text-align:right;
+      }
+      p{
+        margin:0;
+      }
+      .background-container{
+        height:100vh;
+        width:100%;
+        background-color:var(${_state.state.data.hasWon ? "--won-color" : "--loose-color"});
+        opacity:0.5;
+      }
+      </style>
+      `;
     setTimeout(()=>{
         div.appendChild(resultEl);
     }, 3000);
@@ -986,25 +1152,57 @@ module.exports = require('./helpers/bundle-url').getBundleURL('7UhFu') + "star.a
 },{"./helpers/bundle-url":"lgJ39"}],"aGzWk":[function(require,module,exports) {
 var _setSeconds = require("./setSeconds");
 customElements.define('countdown-el', class countdown extends HTMLElement {
+    constructor(){
+        super();
+        this.shadow = this.attachShadow({
+            mode: "open"
+        });
+    }
     connectedCallback() {
         this.seconds = this.getAttribute("seconds") || "3";
         const style = document.createElement("style");
-        style.innerHTML = `\n        .circulo{\n            display:flex;\n            justify-content:center;\n            align-items:center;\n            border:10px solid black;  \n            border-radius:50%;\n            width:243px;\n            height:243px;\n            animation: circulo ${parseInt(this.seconds, 10) + 2 + "s"} ease 1;\n            animation-delay: 0s;\n        }\n        @keyframes circulo{\n            0%{\n                transform: scale(0.5)\n            }\n            80%{\n                transform: scale(1.0)\n            }\n            100%{\n                transform: scale(0.2)\n              }\n            }\n            .cuenta-regresiva{\n                font-family:'Roboto';\n                font-weight:700;\n                font-size:100px;\n            }\n            `;
+        style.innerHTML = `
+        .circulo{
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            border:10px solid black;  
+            border-radius:50%;
+            width:243px;
+            height:243px;
+            animation: circulo ${parseInt(this.seconds, 10) + 2 + "s"} ease 1;
+            animation-delay: 0s;
+        }
+        @keyframes circulo{
+            0%{
+                transform: scale(0.5)
+            }
+            80%{
+                transform: scale(1.0)
+            }
+            100%{
+                transform: scale(0.2)
+              }
+            }
+            .cuenta-regresiva{
+                font-family:'Roboto';
+                font-weight:700;
+                font-size:100px;
+            }
+            `;
         this.shadow.appendChild(style);
         this.render();
     }
     render() {
         const div = document.createElement("div");
         div.setAttribute("seconds", this.seconds);
-        div.innerHTML = `\n            <div class="circulo">\n            <h1 class="cuenta-regresiva"></h1>       \n            </div>\n        `;
+        div.innerHTML = `
+            <div class="circulo">
+            <h1 class="cuenta-regresiva"></h1>       
+            </div>
+        `;
         _setSeconds.setSeconds(div);
         this.shadow.appendChild(div);
-    }
-    constructor(){
-        super();
-        this.shadow = this.attachShadow({
-            mode: "open"
-        });
     }
 });
 
