@@ -19,6 +19,7 @@ customElements.define('elemento-el', class Elemento extends HTMLElement {
 
           if(this.elemento == "piedra" || this.elemento == "papel" || this.elemento == "tijera"){
             const params = state.getParams();
+            
             state.savePlayerPlay(this.elemento);
             params.goTo("/showHands")
           }

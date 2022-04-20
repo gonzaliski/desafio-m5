@@ -10,15 +10,15 @@ const state = {
     hasWon: false,
   },
   init(){
-    const localData = localStorage.getItem("saved-item");
-    this.setState(JSON.parse(localData))
+    // const localData = localStorage.getItem("saved-item");
+    // this.setState(JSON.parse(localData))
   },
   getState() {
     return this.data;
   },
   setComSelection() {
     const comSelection = this.getRandomSelection();
-    console.log("jugada de COM", comSelection);
+
     const currentState = this.getState();
     currentState.comPlay = comSelection;
     this.setState(currentState);
@@ -34,7 +34,7 @@ const state = {
   },
   getPlayerSelection() {
     const lastState = this.getState();
-    console.log("player move:", lastState.playerPlay);
+
 
     return lastState.playerPlay;
   },
@@ -44,11 +44,13 @@ const state = {
   
   },
   savePlayerPlay(play: Play) {
+
     const currentState = this.getState();
+    
     currentState.playerPlay = play;
-    console.log("saving player move:", currentState.playerPlay);
-    this.setState(currentState);
+
     this.setComSelection();
+    this.setState(currentState);
   },
   parameters: {},
   saveParams(params) {
@@ -57,7 +59,7 @@ const state = {
   getParams() {
     return this.parameters;
   },
-  whoWins() {
+  whoWins() {    
     const playerMove = this.getPlayerSelection();
     const comMove = this.getComSelection();
     const ganeConTijera = playerMove == "tijera" && comMove == "papel";
@@ -80,17 +82,13 @@ const state = {
   saveHistory(result) {
     const currentState = this.getState();
     if (result) {
-      console.log(
-        "jugador gana tenia:",
-        currentState.history.player,
-        "victorias"
-      );
+ 
       currentState.history.player += 1;
-      console.log("ahora tiene:", currentState.history.player, "victorias");
+      
     } else {
-      console.log("com gana tenia:", currentState.history.com, "victorias");
+      
       currentState.history.com += 1;
-      console.log("ahora tiene:", currentState.history.com, "victorias");
+      
     }
     this.setState(currentState);
   },

@@ -1,6 +1,8 @@
 import "../../root"
 import {state} from "../../state"
 export function initPage(params){
+    state.saveParams(params); 
+
     const div = document.createElement("div");
     div.innerHTML = `
         <countdown-el seconds="3" class="countdown-game"></countdown-el>
@@ -22,11 +24,10 @@ export function initPage(params){
         bottom:0px;
       }
     `
-    const playerOption = div.querySelector(".options")
-    playerOption.addEventListener("click",()=>{
-      params.goTo("/showHands")
-    })
-    state.saveParams(params); 
+    // const playerOption = div.querySelector(".options")
+    // playerOption.addEventListener("click",()=>{
+    //   params.goTo("/showHands")
+    // })
     
     div.appendChild(style);
     return div
