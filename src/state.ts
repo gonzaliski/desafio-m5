@@ -9,10 +9,7 @@ const state = {
     },
     hasWon: false,
   },
-  init(){
-    // const localData = localStorage.getItem("saved-item");
-    // this.setState(JSON.parse(localData))
-  },
+
   getState() {
     return this.data;
   },
