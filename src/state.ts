@@ -9,6 +9,14 @@ const state = {
     },
     hasWon: false,
   },
+  init() {
+		const localData = JSON.parse(localStorage.getItem("data"));
+    console.log(localData);
+		if (localStorage.getItem("data")) {
+			return (this.data.history = localData);
+		}
+		console.log(localData);
+	},
 
   getState() {
     return this.data;
@@ -63,7 +71,6 @@ const state = {
     const ganeConPapel = playerMove == "papel" && comMove == "piedra";
     const ganeConPiedra = playerMove == "piedra" && comMove == "tijera";
     const gane = [ganeConPapel, ganeConPiedra, ganeConTijera].includes(true);
-    localStorage.setItem("saved-item", JSON.stringify(this.getState()))
     this.getState().hasWon = gane;
     this.saveHistory(gane);
     return gane;
@@ -77,17 +84,20 @@ const state = {
     return this.getState().hasWon;
   },
   saveHistory(result) {
-    const currentState = this.getState();
+    const currentHistory = this.getState().history;
     if (result) {
  
-      currentState.history.player += 1;
+      currentHistory.player += 1;
+      console.log("player victoria:",currentHistory.player );
       
     } else {
       
-      currentState.history.com += 1;
+      currentHistory.com += 1;
+      console.log("com victoria:",currentHistory.com );
+      
       
     }
-    this.setState(currentState);
+    localStorage.setItem("data", JSON.stringify(currentHistory))
   },
 };
 

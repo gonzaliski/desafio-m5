@@ -21,7 +21,7 @@ customElements.define('elemento-el', class Elemento extends HTMLElement {
             const params = state.getParams();
             
             state.savePlayerPlay(this.elemento);
-            params.goTo("/showHands")
+            params.goTo("/instructions")
           }
         })
       }
