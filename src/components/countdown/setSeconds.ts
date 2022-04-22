@@ -7,9 +7,8 @@ export function setSeconds(container) {
   secondEl.textContent = countdown;
   const intervalId = setInterval(() => {
     if (countdown == 0) {
-        if(location.pathname == "/game"){
-          state.savePlayerPlay("tijera")  
-            state.getParams().goTo("/showHands");
+        if(location.pathname == "/desafio-m5/game"){ 
+            state.getParams().goTo("/instructions");
             clearInterval(intervalId);
         }
       clearInterval(intervalId);

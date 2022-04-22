@@ -21,6 +21,7 @@ const routes = [
     component: initShowHands
   }
 ]
+
 const BASE_PATH = "/desafio-m5";
 
 function isGithubPages() {
@@ -53,5 +54,9 @@ export function initRouter(container: Element) {
     
     // resto del router...
   }
-  handleRoute("/welcome");
+  if (location.pathname == "/desafio-m5/") {
+		goTo("/welcome");
+	} else {
+		handleRoute(location.pathname);
+	}
 }

@@ -24,10 +24,10 @@ export function initPage(params){
         bottom:0px;
       }
     `
-    // const playerOption = div.querySelector(".options")
-    // playerOption.addEventListener("click",()=>{
-    //   params.goTo("/showHands")
-    // })
+    const playerOption = div.querySelector(".options")
+    playerOption.addEventListener("click",()=>{
+      params.goTo("/showHands")
+    })
     
     div.appendChild(style);
     return div
