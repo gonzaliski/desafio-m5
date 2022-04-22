@@ -34,12 +34,14 @@ export function initPage(params) {
         overflow: hidden;
       }
       .option-player{
+        pointer-events:none;
         transform: scale(1.5);
         position: absolute;
         bottom:0px;
         animation: move-up 2s ease 1;
       }
       .option-com{
+        pointer-events:none;
         transform: scale(1.5) rotate(180deg);
         position: absolute;
         top:0px;
